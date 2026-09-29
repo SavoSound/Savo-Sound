@@ -80,5 +80,60 @@
     <div class="title-glow"></div>
     <h1>SAVO SOUND</h1>
     <div class="subtitle">VST3 EFFECT PLUGINS</div>
+
+<style>
+.plugin-grid {
+    width: min(1100px, 88vw);
+    margin: 55px auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid rgba(255,255,255,0.75);
+    min-height: calc(100vh - 260px);
+    position: relative;
+}
+
+.plugin-grid::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: rgba(255,255,255,0.75);
+}
+
+.plugin-slot {
+    height: 230px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 35px;
+    box-sizing: border-box;
+    background: rgba(0,0,0,0.12);
+}
+
+.plugin-slot:nth-child(odd) {
+}
+
+.plugin-name {
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-shadow:
+        0 0 8px #000,
+        0 0 20px #000,
+        0 0 40px #000;
+}
+</style>
+
+<div class="plugin-grid">
+    <div class="plugin-slot">
+        <a href="skrikern.html" class="plugin-name">Skriker`n</a>
+    </div>
+    <div class="plugin-slot"></div>
+</div>
+
 </body>
 </html>
