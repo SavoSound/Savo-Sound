@@ -140,5 +140,179 @@
     </div>
 </div>
 
+
+<!-- =========================
+     SUPPORT SAVO SOUND
+========================= -->
+
+<style>
+.support-section {
+    min-height: 100vh;
+    margin-top: 120px;
+    padding: 120px 24px 100px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,0) 0%,
+            rgba(0,0,0,0.45) 15%,
+            rgba(0,0,0,0.78) 45%,
+            rgba(0,0,0,0.92) 100%
+        );
+}
+
+.support-section h2 {
+    margin: 0;
+    font-size: clamp(38px, 6vw, 72px);
+    letter-spacing: 8px;
+    text-shadow:
+        0 0 12px #000,
+        0 0 32px #000,
+        0 0 70px #000;
+}
+
+.support-line {
+    width: min(700px, 80vw);
+    height: 1px;
+    margin: 35px auto;
+    background: rgba(255,255,255,0.65);
+}
+
+.support-text {
+    width: min(720px, 88vw);
+    margin: 0 auto;
+    font-size: 18px;
+    line-height: 1.7;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.92);
+    text-shadow: 0 0 15px #000;
+}
+
+.support-text strong {
+    color: white;
+}
+
+.checkout-box {
+    width: min(620px, 92vw);
+    margin-top: 50px;
+    padding: 30px;
+    box-sizing: border-box;
+
+    border: 1px solid rgba(255,255,255,0.65);
+    background: rgba(0,0,0,0.50);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    box-shadow:
+        0 0 30px rgba(0,0,0,0.5),
+        0 0 90px rgba(0,0,0,0.35);
+}
+
+.support-status {
+    margin: 0;
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.8);
+}
+</style>
+
+<section class="support-section" id="support">
+    <h2>SUPPORT SAVO SOUND</h2>
+
+    <div class="support-line"></div>
+
+    <p class="support-text">
+        <strong>Every Savo Sound plugin is free to download and use.</strong>
+        <br><br>
+        If you like what we're building and want to support future
+        development, you can contribute whatever you think it's worth.
+    </p>
+
+    <div class="checkout-box" id="checkout">
+        <p class="support-status">
+            SUPPORT CHECKOUT
+        </p>
+
+        <div id="stripe-checkout"></div>
+    </div>
+</section>
+
+<!-- END SUPPORT SAVO SOUND -->
+
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<script>
+const stripe = Stripe(
+  "pk_live_51ULmKmD4VZ60nTCMzU1wp1KvHRRCanCIWo0Le36Dq1cZVjVL2Fe4bEDNOV6viEcUbGB38OBAljFfENoCgTbZNUhR00I7GeojYi"
+);
+
+async function startSavoCheckout() {
+    const mountPoint = document.getElementById("stripe-checkout");
+
+    if (!mountPoint)
+        return;
+
+    try {
+        const checkout = await stripe.initEmbeddedCheckout({
+            fetchClientSecret: async () => {
+                const response = await fetch(
+                    "https://savo-sound-stripe.espennesta.workers.dev/",
+                    {
+                        method: "POST"
+                    }
+                );
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText);
+                }
+
+                const session = await response.json();
+
+                if (!session.client_secret) {
+                    throw new Error(
+                        "Stripe returned no client_secret"
+                    );
+                }
+
+                return session.client_secret;
+            }
+        });
+
+        checkout.mount("#stripe-checkout");
+
+        const status =
+            document.querySelector(".support-status");
+
+        if (status)
+            status.style.display = "none";
+
+    } catch (error) {
+        console.error("Savo Sound checkout error:", error);
+
+        const status =
+            document.querySelector(".support-status");
+
+        if (status) {
+            status.textContent =
+                "Checkout could not be loaded.";
+        }
+    }
+}
+
+startSavoCheckout();
+</script>
+
 </body>
 </html>
