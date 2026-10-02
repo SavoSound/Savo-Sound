@@ -311,7 +311,9 @@ async function startSavoCheckout() {
     }
 }
 
-startSavoCheckout();
+window.addEventListener("pageshow", () => {
+    startSavoCheckout();
+});
 </script>
 
 </body>
