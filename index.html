@@ -311,13 +311,22 @@ async function startSavoCheckout() {
     }
 }
 
+if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+}
+
 window.addEventListener("pageshow", () => {
     window.scrollTo(0, 0);
     startSavoCheckout();
 
-    setTimeout(() => {
+    const keepAtTop = setInterval(() => {
         window.scrollTo(0, 0);
-    }, 500);
+    }, 100);
+
+    setTimeout(() => {
+        clearInterval(keepAtTop);
+        window.scrollTo(0, 0);
+    }, 3000);
 });
 </script>
 
