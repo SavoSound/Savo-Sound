@@ -305,7 +305,24 @@ async function startSavoCheckout() {
             }
         });
 
+        const savedScrollX = window.scrollX;
+        const savedScrollY = window.scrollY;
+
         checkout.mount("#stripe-checkout");
+
+        const protectScroll = () => {
+            if (document.activeElement &&
+                document.activeElement.tagName === "IFRAME" &&
+                document.activeElement.title === "Embedded checkout") {
+                document.activeElement.blur();
+                window.scrollTo(savedScrollX, savedScrollY);
+            }
+        };
+
+        requestAnimationFrame(protectScroll);
+        setTimeout(protectScroll, 100);
+        setTimeout(protectScroll, 300);
+        setTimeout(protectScroll, 700);
 
         const status =
             document.querySelector(".support-status");
@@ -337,21 +354,7 @@ window.addEventListener("pageshow", (event) => {
     }
 
     window.scrollTo(0, 0);
-
-    const supportSection = document.getElementById("support");
-    let checkoutStarted = false;
-
-    const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && !checkoutStarted) {
-            checkoutStarted = true;
-            observer.disconnect();
-            startSavoCheckout();
-        }
-    }, {
-        rootMargin: "800px 0px"
-    });
-
-    observer.observe(supportSection);
+    startSavoCheckout();
 });
 </script>
 
