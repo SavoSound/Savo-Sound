@@ -315,7 +315,11 @@ if ("scrollRestoration" in history) {
     history.scrollRestoration = "manual";
 }
 
-window.addEventListener("pageshow", () => {
+window.addEventListener("pageshow", (event) => {
+    if (event.persisted) {
+        location.reload();
+        return;
+    }
     window.scrollTo(0, 0);
     startSavoCheckout();
 
@@ -326,7 +330,7 @@ window.addEventListener("pageshow", () => {
     setTimeout(() => {
         clearInterval(keepAtTop);
         window.scrollTo(0, 0);
-    }, 1500);
+    }, 800);
 });
 </script>
 
