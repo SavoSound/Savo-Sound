@@ -312,7 +312,12 @@ async function startSavoCheckout() {
 }
 
 window.addEventListener("pageshow", () => {
+    window.scrollTo(0, 0);
     startSavoCheckout();
+
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+    }, 500);
 });
 </script>
 
