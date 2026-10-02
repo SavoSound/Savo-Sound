@@ -307,22 +307,29 @@ async function startSavoCheckout() {
 
         const savedScrollX = window.scrollX;
         const savedScrollY = window.scrollY;
+        let userInvitedStripe = false;
+
+        mountPoint.addEventListener("pointerdown", () => {
+            userInvitedStripe = true;
+        }, true);
 
         checkout.mount("#stripe-checkout");
 
-        const protectScroll = () => {
-            if (document.activeElement &&
-                document.activeElement.tagName === "IFRAME" &&
-                document.activeElement.title === "Embedded checkout") {
-                document.activeElement.blur();
+        const focusGuard = setInterval(() => {
+            const active = document.activeElement;
+
+            if (!userInvitedStripe &&
+                active &&
+                active.tagName === "IFRAME" &&
+                active.title === "Embedded checkout") {
+                active.blur();
                 window.scrollTo(savedScrollX, savedScrollY);
             }
-        };
+        }, 50);
 
-        requestAnimationFrame(protectScroll);
-        setTimeout(protectScroll, 100);
-        setTimeout(protectScroll, 300);
-        setTimeout(protectScroll, 700);
+        setTimeout(() => {
+            clearInterval(focusGuard);
+        }, 10000);
 
         const status =
             document.querySelector(".support-status");
