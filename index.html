@@ -335,17 +335,23 @@ window.addEventListener("pageshow", (event) => {
         location.reload();
         return;
     }
+
     window.scrollTo(0, 0);
-    startSavoCheckout();
 
-    const keepAtTop = setInterval(() => {
-        window.scrollTo(0, 0);
-    }, 100);
+    const supportSection = document.getElementById("support");
+    let checkoutStarted = false;
 
-    setTimeout(() => {
-        clearInterval(keepAtTop);
-        window.scrollTo(0, 0);
-    }, 1000);
+    const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !checkoutStarted) {
+            checkoutStarted = true;
+            observer.disconnect();
+            startSavoCheckout();
+        }
+    }, {
+        rootMargin: "800px 0px"
+    });
+
+    observer.observe(supportSection);
 });
 </script>
 
