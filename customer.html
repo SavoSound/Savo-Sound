@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer | Savo Sound</title>
+<style>
+html, body {
+    margin: 0;
+    min-height: 100%;
+    background: #000;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    visibility: hidden;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-image:
+        linear-gradient(rgba(0,0,0,0.72), rgba(0,0,0,0.72)),
+        url("miksingbak.png");
+    background-size: 100% auto;
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-color: #000;
+}
+
+h1 {
+    font-size: 48px;
+    letter-spacing: 5px;
+}
+
+.customer-content {
+    width: min(720px, calc(100% - 40px));
+    margin: 100px auto;
+}
+
+.customer-content h1 {
+    margin: 0 0 20px;
+    font-size: 46px;
+    letter-spacing: 5px;
+}
+
+.customer-content h2 {
+    margin: 0 0 18px;
+    font-size: 24px;
+}
+
+.customer-content p {
+    margin: 0 auto 32px;
+    max-width: 680px;
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+#inquiry-message {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 260px;
+    padding: 20px;
+    resize: vertical;
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 5px;
+    outline: none;
+    background: rgba(0,0,0,0.78);
+    color: white;
+    font: 16px/1.6 Arial, Helvetica, sans-serif;
+}
+
+#inquiry-message:focus {
+    border-color: white;
+}
+
+#inquiry-message::placeholder {
+    color: rgba(255,255,255,0.55);
+}
+
+#send-inquiry {
+    margin-top: 18px;
+    padding: 15px 30px;
+    border: 1px solid white;
+    border-radius: 4px;
+    background: white;
+    color: black;
+    font: inherit;
+    font-weight: bold;
+    letter-spacing: 3px;
+    cursor: pointer;
+}
+
+#send-inquiry:hover {
+    background: transparent;
+    color: white;
+}
+</style>
+</head>
+
+<body>
+    <main class="customer-content">
+        <h1>MIX INQUIRIES</h1>
+
+        <h2>Tell me about your project.</h2>
+
+        <p>
+            Use the form below to describe the project you'd like Savo Sound to mix.
+            Include whatever you think is relevant — the music, number of tracks,
+            current stage of the production, references, deadlines or anything else
+            I should know.
+        </p>
+
+        <p>
+            Your inquiry will be sent directly to Savo Sound by email. Feel free to write in either English or Norwegian.
+            If the project looks like a good fit, I'll normally get back to you
+            by email within one week.
+        </p>
+
+        <textarea id="inquiry-message" placeholder="Describe your project..."></textarea>
+
+        <button type="button" id="send-inquiry">SEND INQUIRY</button>
+        <div id="inquiry-status" style="margin-top:18px; min-height:22px;"></div>
+    </main>
+
+<script type="module">
+import { createClient } from
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const supabase = createClient(
+  'https://aqrclpzgxmvkvqgaeirc.supabase.co',
+  'sb_publishable_EfdZX4IhjuqWadyf0bi2wg_znf8kNXU'
+);
+
+try {
+  const { data, error } = await supabase.auth.getSession();
+
+  if (error || !data.session) {
+    window.location.replace('mixing.html');
+  } else {
+    document.body.style.visibility = 'visible';
+
+    const sendButton = document.getElementById('send-inquiry');
+    const messageBox = document.getElementById('inquiry-message');
+    const statusBox = document.getElementById('inquiry-status');
+
+    sendButton.addEventListener('click', async () => {
+      const message = messageBox.value.trim();
+
+      if (!message) {
+        statusBox.textContent = 'Please describe your project first.';
+        return;
+      }
+
+      sendButton.disabled = true;
+      sendButton.textContent = 'SENDING...';
+      statusBox.textContent = '';
+
+      try {
+        const { data: sessionData, error: sessionError } =
+          await supabase.auth.getSession();
+
+        if (sessionError || !sessionData.session) {
+          window.location.replace('mixing.html');
+          return;
+        }
+
+        const response = await fetch(
+          'https://aqrclpzgxmvkvqgaeirc.supabase.co/functions/v1/send-mix-inquiry',
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${sessionData.session.access_token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message })
+          }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.error || 'Could not send inquiry.');
+        }
+
+        messageBox.value = '';
+        statusBox.textContent = 'Your inquiry has been sent to Savo Sound.';
+      } catch (error) {
+        console.error(error);
+        statusBox.textContent =
+          'Something went wrong. Please try again.';
+      } finally {
+        sendButton.disabled = false;
+        sendButton.textContent = 'SEND INQUIRY';
+      }
+    });
+  }
+} catch {
+  window.location.replace('mixing.html');
+}
+</script>
+
+</body>
+</html>
