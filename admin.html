@@ -61,6 +61,26 @@ body {
     background: rgba(0,0,0,0.72);
 }
 
+#customerList.has-open-customer .customer-card:not(.active-customer) {
+    opacity: 0.16;
+    filter: brightness(0.35);
+}
+
+#customerList.has-open-customer .customer-card.active-customer {
+    opacity: 1;
+    filter: none;
+    border-color: rgba(255,255,255,0.65);
+    background: rgba(0,0,0,0.82);
+}
+
+.customer-card {
+    transition:
+        border-color 0.2s,
+        background 0.2s,
+        opacity 0.25s ease,
+        filter 0.25s ease;
+}
+
 .project-controls {
     display: none;
     margin-top: 16px;
@@ -900,12 +920,33 @@ try {
                             event.target.closest('button')
                         ) return;
 
-                        controls.classList.toggle('open');
+                        const opening =
+                            !controls.classList.contains('open');
 
-                        if (
-                            controls.classList.contains('open') &&
-                            !projectsLoaded
-                        ) {
+                        document.querySelectorAll('.customer-card').forEach(otherCard => {
+                            if (otherCard !== card) {
+                                otherCard.classList.remove('active-customer');
+
+                                const otherControls =
+                                    otherCard.querySelector('.project-controls');
+
+                                if (otherControls) {
+                                    otherControls.classList.remove('open');
+                                }
+                            }
+                        });
+
+                        if (opening) {
+                            controls.classList.add('open');
+                            card.classList.add('active-customer');
+                            customerList.classList.add('has-open-customer');
+                        } else {
+                            controls.classList.remove('open');
+                            card.classList.remove('active-customer');
+                            customerList.classList.remove('has-open-customer');
+                        }
+
+                        if (opening && !projectsLoaded) {
                             await loadProjects();
                         }
                     });
