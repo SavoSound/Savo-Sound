@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Customer | Savo Sound</title>
+<title>My Side | Savo Sound</title>
 <style>
 html, body {
     margin: 0;
@@ -96,11 +96,455 @@ h1 {
     background: transparent;
     color: white;
 }
+
+.portal-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 auto 42px;
+}
+
+.portal-tab {
+    min-width: 210px;
+    padding: 16px 24px;
+    border: 1px solid rgba(255,255,255,0.45);
+    border-radius: 4px;
+    background: rgba(0,0,0,0.72);
+    color: rgba(255,255,255,0.7);
+    font: inherit;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.portal-tab:hover {
+    border-color: white;
+    color: white;
+}
+
+.portal-tab.active {
+    background: white;
+    border-color: white;
+    color: black;
+}
+
+#projects-view {
+    display: none;
+}
+
+#projects-view h1 {
+    margin-bottom: 24px;
+}
+
+.no-projects {
+    font-size: 18px;
+    color: rgba(255,255,255,0.75);
+}
+
+
+.project-card {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 28px 0;
+    padding: 32px;
+    border: 1px solid rgba(255,255,255,0.32);
+    border-radius: 8px;
+    background: rgba(0,0,0,0.68);
+    text-align: center;
+}
+
+.project-name {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 4px;
+}
+
+.project-status {
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.68);
+}
+
+.project-status.pending {
+    color: #ff9d2e;
+}
+
+.project-status.mix-ready {
+    color: #62d982;
+}
+
+.upload-title {
+    margin-top: 34px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.upload-zone {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 34px 20px;
+    border: 1px dashed rgba(255,255,255,0.48);
+    border-radius: 7px;
+    background: rgba(255,255,255,0.035);
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.upload-zone:hover {
+    border-color: white;
+    background: rgba(255,255,255,0.07);
+}
+
+.upload-icon {
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.upload-main {
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.upload-help {
+    margin-top: 9px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.58);
+}
+
+
+.upload-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.upload-choice {
+    padding: 11px 18px;
+    border: 1px solid rgba(255,255,255,0.42);
+    border-radius: 4px;
+    background: rgba(0,0,0,0.72);
+    color: white;
+    font: inherit;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.upload-choice:hover {
+    background: white;
+    color: black;
+}
+
+.upload-progress-wrap {
+    display: none;
+    margin-top: 20px;
+}
+
+.upload-progress-track {
+    height: 8px;
+    overflow: hidden;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.13);
+}
+
+.upload-progress-bar {
+    width: 0%;
+    height: 100%;
+    background: rgba(255,255,255,0.92);
+    transition: width 0.15s linear;
+}
+
+.upload-progress-text {
+    margin-top: 10px;
+    min-height: 18px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.72);
+}
+
+
+.all-files-uploaded {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 18px;
+    padding: 15px 20px;
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 5px;
+    background: transparent;
+    color: white;
+    font: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.all-files-uploaded:hover {
+    background: white;
+    color: black;
+}
+
+.all-files-uploaded:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.upload-closed {
+    margin-top: 24px;
+    padding: 18px;
+    border: 1px solid rgba(255,157,46,0.5);
+    border-radius: 6px;
+    color: #ff9d2e;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.upload-zone.drag-over {
+    border-color: white;
+    background: rgba(255,255,255,0.11);
+}
+
+.upload-zone.uploading {
+    cursor: default;
+}
+
+
+.preview-player {
+    margin-top: 28px;
+    padding: 22px;
+    border: 1px solid rgba(255,255,255,0.24);
+    border-radius: 7px;
+    background: rgba(255,255,255,0.035);
+}
+
+.preview-player-title {
+    margin-bottom: 13px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.preview-player audio {
+    display: block;
+    width: 100%;
+}
+
+.preview-player-message {
+    min-height: 18px;
+    margin-top: 10px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.58);
+}
+
+
+.mix-response-actions {
+    margin-top: 16px;
+    display: flex;
+    gap: 10px;
+}
+
+.mix-response-actions button {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 4px;
+    font: inherit;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+}
+
+.request-revision-button {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.85);
+}
+
+.approve-mix-button {
+    background: #62d982;
+    border: 1px solid #62d982;
+    color: #071009;
+}
+
+.mix-response-actions button:disabled,
+.revision-submit:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.revision-panel {
+    display: none;
+    margin-top: 12px;
+}
+
+.revision-panel.open {
+    display: block;
+}
+
+.revision-text {
+    width: 100%;
+    min-height: 120px;
+    box-sizing: border-box;
+    resize: vertical;
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(0,0,0,0.35);
+    color: white;
+    font: inherit;
+    line-height: 1.5;
+}
+
+.revision-submit {
+    width: 100%;
+    margin-top: 8px;
+    padding: 11px 14px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.55);
+    background: transparent;
+    color: white;
+    font: inherit;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+}
+
+.mix-response-message {
+    margin-top: 10px;
+    min-height: 18px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.72);
+}
+
+
+.payment-panel,
+.download-panel {
+    margin-top: 24px;
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.28);
+    border-radius: 7px;
+    background: rgba(255,255,255,0.045);
+}
+
+.payment-title,
+.download-title {
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.payment-price {
+    margin: 10px 0 18px;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.payment-help,
+.download-help,
+.download-deadline {
+    margin: 10px auto 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.65);
+}
+
+.pay-mix-button,
+.download-files-button,
+.confirm-downloaded-button {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 14px;
+    padding: 14px 18px;
+    border-radius: 4px;
+    font: inherit;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.pay-mix-button,
+.download-files-button {
+    border: 1px solid white;
+    background: white;
+    color: black;
+}
+
+.pay-mix-button:hover,
+.download-files-button:hover {
+    background: transparent;
+    color: white;
+}
+
+.confirm-downloaded-button {
+    border: 1px solid rgba(255,255,255,0.45);
+    background: transparent;
+    color: white;
+}
+
+.confirm-downloaded-button:hover {
+    border-color: white;
+    background: rgba(255,255,255,0.08);
+}
+
+.pay-mix-button:disabled,
+.download-files-button:disabled,
+.confirm-downloaded-button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.payment-message,
+.download-message {
+    min-height: 18px;
+    margin-top: 12px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.72);
+}
+
+@media (max-width: 560px) {
+    .portal-tabs {
+        gap: 8px;
+    }
+
+    .portal-tab {
+        min-width: 0;
+        flex: 1;
+        padding: 14px 10px;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+}
+
 </style>
 </head>
 
 <body>
     <main class="customer-content">
+        <div class="portal-tabs">
+            <button type="button" class="portal-tab active" id="tab-inquiries">INQUIRIES</button>
+            <button type="button" class="portal-tab" id="tab-projects">MY PROJECTS</button>
+        </div>
+
+        <div id="inquiries-view">
         <h1>MIX INQUIRIES</h1>
 
         <h2>Tell me about your project.</h2>
@@ -122,6 +566,29 @@ h1 {
 
         <button type="button" id="send-inquiry">SEND INQUIRY</button>
         <div id="inquiry-status" style="margin-top:18px; min-height:22px;"></div>
+        </div>
+
+        <div id="projects-view">
+            <h1>MY PROJECTS</h1>
+
+            <div class="how-it-works">
+                <h2>HOW IT WORKS</h2>
+                <p>
+                    Once we've agreed on a mixing project, it will appear below.
+                    You can then upload all tracks for your project directly here.
+                    When the files are ready, Savo Sound will begin the mix.
+                </p>
+                <p>
+                    When your mix is ready, you can listen to it directly here.
+                    If everything sounds good, complete the payment to unlock the
+                    final files for download. One revision is included.
+                </p>
+            </div>
+
+            <div id="projects-list">
+                <p class="no-projects">Loading projects...</p>
+            </div>
+        </div>
     </main>
 
 <script type="module">
@@ -141,7 +608,1026 @@ try {
   } else {
     document.body.style.visibility = 'visible';
 
-    const sendButton = document.getElementById('send-inquiry');
+    const inquiriesTab = document.getElementById('tab-inquiries');
+    const projectsTab = document.getElementById('tab-projects');
+    const inquiriesView = document.getElementById('inquiries-view');
+    const projectsView = document.getElementById('projects-view');
+
+    inquiriesTab.addEventListener('click', () => {
+      inquiriesTab.classList.add('active');
+      projectsTab.classList.remove('active');
+      inquiriesView.style.display = 'block';
+      projectsView.style.display = 'none';
+    });
+
+    projectsTab.addEventListener('click', async () => {
+      projectsTab.classList.add('active');
+      inquiriesTab.classList.remove('active');
+      projectsView.style.display = 'block';
+      inquiriesView.style.display = 'none';
+
+      
+      const projectsList = document.getElementById('projects-list');
+      projectsList.innerHTML = '<p class="no-projects">Loading projects...</p>';
+
+      const { data: projects, error: projectsError } = await supabase
+        .from('mixing_projects')
+        .select('id, project_name, status, price_nok, payment_requested, payment_status, downloads_enabled, downloaded_at, delete_after, created_at')
+        .order('created_at', { ascending: false });
+
+      if (projectsError) {
+        projectsList.innerHTML =
+          '<p class="no-projects">Could not load projects.</p>';
+        console.error(projectsError);
+        return;
+      }
+
+      if (!projects || projects.length === 0) {
+        projectsList.innerHTML =
+          '<p class="no-projects">You have no active projects.</p>';
+        return;
+      }
+
+      projectsList.innerHTML = projects.map(project => {
+        const price = project.price_nok != null
+          ? Number(project.price_nok).toLocaleString('en-US') + ' NOK'
+          : 'Price not set';
+
+        const status = (project.status || 'active')
+          .replaceAll('_', ' ')
+          .toUpperCase();
+
+        let statusClass = '';
+
+        if (project.status === 'pending') {
+          statusClass = 'pending';
+        } else if (project.status === 'mix_ready') {
+          statusClass = 'mix-ready';
+        }
+
+        return `
+          <div class="project-card">
+              <div class="project-name">${project.project_name}</div>
+              <div class="project-status ${statusClass}">
+                  ${status}
+              </div>
+
+              ${['mix_ready', 'mixing', 'awaiting_payment', 'paid', 'download_ready', 'delivered'].includes(project.status) ? `
+              <div class="preview-player" data-project-id="${project.id}">
+                  <div class="preview-player-title">MIX PREVIEW</div>
+                  <div class="preview-player-message">Loading preview...</div>
+              </div>
+              ` : ''}
+
+              ${project.status === 'mix_ready' ? `
+              <div class="mix-response-actions">
+                  <button
+                      type="button"
+                      class="request-revision-button"
+                      data-project-id="${project.id}">
+                      REQUEST REVISION
+                  </button>
+
+                  <button
+                      type="button"
+                      class="approve-mix-button"
+                      data-project-id="${project.id}">
+                      APPROVE MIX
+                  </button>
+              </div>
+
+              <div
+                  class="revision-panel"
+                  data-project-id="${project.id}">
+                  <textarea
+                      class="revision-text"
+                      maxlength="5000"
+                      placeholder="Describe what you would like changed..."></textarea>
+
+                  <button
+                      type="button"
+                      class="revision-submit">
+                      SEND REVISION REQUEST
+                  </button>
+              </div>
+
+              <div class="mix-response-message"></div>
+              ` : ''}
+
+              
+              ${project.status === 'awaiting_payment' && project.payment_requested === true ? `
+              <div class="payment-panel" data-project-id="${project.id}">
+                  <div class="payment-title">PAYMENT</div>
+                  <div class="payment-price">${price}</div>
+                  <div class="payment-help">
+                      Complete the payment securely through Stripe to unlock your final files.
+                  </div>
+
+                  <button
+                      type="button"
+                      class="pay-mix-button"
+                      data-project-id="${project.id}">
+                      PAY FOR MIX
+                  </button>
+
+                  <div class="payment-message"></div>
+              </div>
+              ` : ''}
+
+              ${project.downloads_enabled === true ? `
+              <div class="download-panel" data-project-id="${project.id}">
+                  <div class="download-title">FINAL FILES</div>
+
+                  <div class="download-help">
+                      Your final project files are ready.
+                      DOWNLOAD FILES downloads the complete delivery folder.
+                  </div>
+
+                  <button
+                      type="button"
+                      class="download-files-button"
+                      data-project-id="${project.id}">
+                      DOWNLOAD FILES
+                  </button>
+
+                  ${project.downloaded_at ? `
+                  <div class="download-deadline">
+                      DOWNLOAD CONFIRMED<br>
+                      Files remain available until
+                      <strong>${
+                          project.delete_after
+                              ? new Date(project.delete_after).toLocaleString()
+                              : 'the download period ends'
+                      }</strong>.
+                  </div>
+                  ` : `
+                  <button
+                      type="button"
+                      class="confirm-downloaded-button"
+                      data-project-id="${project.id}">
+                      CONFIRM FILES DOWNLOADED
+                  </button>
+
+                  <div class="download-deadline">
+                      The 24-hour removal period starts only after you confirm
+                      that your files have been downloaded.
+                  </div>
+                  `}
+
+                  <div class="download-message"></div>
+              </div>
+              ` : ''}
+
+              ${project.status === 'awaiting_files' || project.status === 'active' ? `
+              <div class="upload-title">UPLOAD YOUR TRACKS</div>
+
+              <div class="upload-zone" data-project-id="${project.id}">
+                  <div class="upload-icon">↑</div>
+                  <div class="upload-main">DROP FILES HERE</div>
+                  <div class="upload-help">or choose files or a complete folder</div>
+
+                  <div class="upload-actions">
+                      <button type="button" class="upload-choice choose-files">FILES</button>
+                      <button type="button" class="upload-choice choose-folder">FOLDER</button>
+                  </div>
+
+                  <input class="file-input" type="file" multiple hidden>
+                  <input class="folder-input" type="file" webkitdirectory directory multiple hidden>
+
+                  <div class="upload-progress-wrap">
+                      <div class="upload-progress-track">
+                          <div class="upload-progress-bar"></div>
+                      </div>
+                      <div class="upload-progress-text"></div>
+                  </div>
+              </div>
+
+              <button
+                  type="button"
+                  class="all-files-uploaded"
+                  data-project-id="${project.id}">
+                  ALL FILES UPLOADED
+              </button>
+              ` : `
+              <div class="upload-closed">
+                  FILES SUBMITTED TO SAVO SOUND
+              </div>
+              `}
+          </div>
+        `;
+      }).join('');
+
+      const previewPlayers =
+        projectsList.querySelectorAll('.preview-player');
+
+      for (const previewPlayer of previewPlayers) {
+        const message =
+          previewPlayer.querySelector('.preview-player-message');
+
+        const projectId =
+          previewPlayer.dataset.projectId;
+
+        try {
+          const { data, error } =
+            await supabase.functions.invoke(
+              'get-project-preview',
+              {
+                body: {
+                  project_id: projectId
+                }
+              }
+            );
+
+          if (error || !data?.success || !data?.preview_url) {
+            console.error(
+              'Could not load preview:',
+              error,
+              data
+            );
+
+            message.textContent =
+              'Preview is not available.';
+            continue;
+          }
+
+          const audio =
+            document.createElement('audio');
+
+          audio.controls = true;
+          audio.preload = 'metadata';
+          audio.src = data.preview_url;
+
+          /*
+           * Do not expose a browser download button in the
+           * normal player UI. This is not the final download
+           * system; paid downloads will be handled separately.
+           */
+          audio.setAttribute(
+            'controlsList',
+            'nodownload noplaybackrate'
+          );
+
+          audio.setAttribute(
+            'disablePictureInPicture',
+            ''
+          );
+
+          message.replaceWith(audio);
+
+        } catch (error) {
+          console.error(
+            'Preview player error:',
+            error
+          );
+
+          message.textContent =
+            'Preview is not available.';
+        }
+      }
+
+
+      // MIX RESPONSE
+      document.querySelectorAll('.request-revision-button').forEach(button => {
+        button.addEventListener('click', () => {
+          const projectId = button.dataset.projectId;
+
+          const panel = document.querySelector(
+            `.revision-panel[data-project-id="${projectId}"]`
+          );
+
+          if (!panel) return;
+
+          panel.classList.toggle('open');
+
+          if (panel.classList.contains('open')) {
+            panel.querySelector('.revision-text')?.focus();
+          }
+        });
+      });
+
+      document.querySelectorAll('.revision-submit').forEach(button => {
+        button.addEventListener('click', async () => {
+          const panel = button.closest('.revision-panel');
+          const projectId = panel?.dataset.projectId;
+          const projectCard = button.closest('.project-card');
+          const textarea = panel?.querySelector('.revision-text');
+          const message = projectCard?.querySelector('.mix-response-message');
+
+          const revisionMessage = textarea?.value.trim() || '';
+
+          if (!revisionMessage) {
+            if (message) {
+              message.textContent =
+                'Please describe what you would like changed.';
+            }
+            return;
+          }
+
+          if (!window.confirm(
+            'Send this revision request? The project includes one revision.'
+          )) {
+            return;
+          }
+
+          button.disabled = true;
+
+          if (message) {
+            message.textContent = 'Sending revision request...';
+          }
+
+          const { data, error } =
+            await supabase.functions.invoke('respond-to-mix', {
+              body: {
+                project_id: projectId,
+                action: 'request_revision',
+                revision_message: revisionMessage
+              }
+            });
+
+          if (error || !data?.success) {
+            console.error('Revision request failed:', error, data);
+
+            if (message) {
+              message.textContent =
+                data?.error ||
+                error?.message ||
+                'Could not send revision request.';
+            }
+
+            button.disabled = false;
+            return;
+          }
+
+          if (message) {
+            message.textContent = 'REVISION REQUEST SENT';
+          }
+
+          setTimeout(() => window.location.reload(), 700);
+        });
+      });
+
+      document.querySelectorAll('.approve-mix-button').forEach(button => {
+        button.addEventListener('click', async () => {
+          const projectId = button.dataset.projectId;
+          const projectCard = button.closest('.project-card');
+          const message = projectCard?.querySelector('.mix-response-message');
+          const actions = projectCard?.querySelector('.mix-response-actions');
+
+          if (!window.confirm(
+            'Approve this mix and continue to payment?'
+          )) {
+            return;
+          }
+
+          actions?.querySelectorAll('button').forEach(b => {
+            b.disabled = true;
+          });
+
+          if (message) {
+            message.textContent = 'Approving mix...';
+          }
+
+          const { data, error } =
+            await supabase.functions.invoke('respond-to-mix', {
+              body: {
+                project_id: projectId,
+                action: 'approve'
+              }
+            });
+
+          if (error || !data?.success) {
+            console.error('Mix approval failed:', error, data);
+
+            if (message) {
+              message.textContent =
+                data?.error ||
+                error?.message ||
+                'Could not approve mix.';
+            }
+
+            actions?.querySelectorAll('button').forEach(b => {
+              b.disabled = false;
+            });
+
+            return;
+          }
+
+          if (message) {
+            message.textContent =
+              'MIX APPROVED — READY FOR PAYMENT';
+          }
+
+          setTimeout(() => window.location.reload(), 700);
+        });
+      });
+
+      
+       // PAYMENT
+       document.querySelectorAll('.pay-mix-button').forEach(button => {
+         button.addEventListener('click', async () => {
+           const projectId = button.dataset.projectId;
+           const panel = button.closest('.payment-panel');
+           const message = panel?.querySelector('.payment-message');
+
+           button.disabled = true;
+           button.textContent = 'OPENING PAYMENT...';
+
+           if (message) message.textContent = '';
+
+           try {
+             const { data, error } =
+               await supabase.functions.invoke('create-mixing-checkout', {
+                 body: {
+                   project_id: projectId
+                 }
+               });
+
+             if (error || !data?.checkout_url) {
+               console.error('Checkout failed:', error, data);
+
+               throw new Error(
+                 data?.error ||
+                 error?.message ||
+                 'Could not open payment.'
+               );
+             }
+
+             window.location.href = data.checkout_url;
+
+           } catch (error) {
+             console.error(error);
+
+             if (message) {
+               message.textContent =
+                 error.message || 'Could not open payment.';
+             }
+
+             button.disabled = false;
+             button.textContent = 'PAY FOR MIX';
+           }
+         });
+       });
+
+
+       // DOWNLOAD FINAL FILES
+       document.querySelectorAll('.download-files-button').forEach(button => {
+         button.addEventListener('click', async () => {
+           const projectId = button.dataset.projectId;
+           const panel = button.closest('.download-panel');
+           const message = panel?.querySelector('.download-message');
+
+           button.disabled = true;
+           button.textContent = 'PREPARING DOWNLOAD...';
+
+           if (message) message.textContent = '';
+
+           try {
+             const { data, error } =
+               await supabase.functions.invoke('get-project-download', {
+                 body: {
+                   project_id: projectId
+                 }
+               });
+
+             if (error || !data?.download_url) {
+               console.error('Download failed:', error, data);
+
+               throw new Error(
+                 data?.error ||
+                 error?.message ||
+                 'Could not prepare download.'
+               );
+             }
+
+             // Dropbox handles the large ZIP directly.
+             window.location.href = data.download_url;
+
+             button.textContent = 'DOWNLOAD FILES';
+
+             setTimeout(() => {
+               button.disabled = false;
+             }, 1500);
+
+           } catch (error) {
+             console.error(error);
+
+             if (message) {
+               message.textContent =
+                 error.message || 'Could not prepare download.';
+             }
+
+             button.disabled = false;
+             button.textContent = 'DOWNLOAD FILES';
+           }
+         });
+       });
+
+
+       // START THE 24-HOUR REMOVAL PERIOD
+       document.querySelectorAll('.confirm-downloaded-button').forEach(button => {
+         button.addEventListener('click', async () => {
+           const projectId = button.dataset.projectId;
+           const panel = button.closest('.download-panel');
+           const message = panel?.querySelector('.download-message');
+
+           const confirmed = window.confirm(
+             'Confirm that you have downloaded and safely saved all final files? After confirmation, the files will remain available for 24 hours.'
+           );
+
+           if (!confirmed) return;
+
+           button.disabled = true;
+           button.textContent = 'CONFIRMING...';
+
+           if (message) message.textContent = '';
+
+           try {
+             const { data, error } =
+               await supabase.functions.invoke(
+                 'confirm-project-downloaded',
+                 {
+                   body: {
+                     project_id: projectId
+                   }
+                 }
+               );
+
+             if (error || !data?.success) {
+               console.error(
+                 'Download confirmation failed:',
+                 error,
+                 data
+               );
+
+               throw new Error(
+                 data?.error ||
+                 error?.message ||
+                 'Could not confirm the download.'
+               );
+             }
+
+             if (message) {
+               message.textContent =
+                 'DOWNLOAD CONFIRMED — FILES REMAIN AVAILABLE FOR 24 HOURS';
+             }
+
+             setTimeout(() => window.location.reload(), 800);
+
+           } catch (error) {
+             console.error(error);
+
+             if (message) {
+               message.textContent =
+                 error.message || 'Could not confirm the download.';
+             }
+
+             button.disabled = false;
+             button.textContent = 'CONFIRM FILES DOWNLOADED';
+           }
+         });
+       });
+
+
+       const CHUNK_SIZE = 4 * 1024 * 1024;
+
+      async function sendUploadChunk(projectId, relativePath, action, chunk, sessionId = '', offset = 0) {
+        const { data: sessionData, error: sessionError } =
+          await supabase.auth.getSession();
+
+        if (sessionError || !sessionData.session) {
+          window.location.replace('mixing.html');
+          throw new Error('Session expired.');
+        }
+
+        const form = new FormData();
+        form.append('project_id', projectId);
+        form.append('relative_path', relativePath);
+        form.append('action', action);
+        form.append('session_id', sessionId);
+        form.append('offset', String(offset));
+        form.append('chunk', chunk, 'chunk.bin');
+
+        const response = await fetch(
+          'https://aqrclpzgxmvkvqgaeirc.supabase.co/functions/v1/upload-mixing-file',
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${sessionData.session.access_token}`
+            },
+            body: form
+          }
+        );
+
+        let result = {};
+
+        try {
+          result = await response.json();
+        } catch {
+          throw new Error('Upload server returned an invalid response.');
+        }
+
+        if (!response.ok || result.error) {
+          throw new Error(result.error || 'Upload failed.');
+        }
+
+        return result;
+      }
+
+      async function uploadOneFile(projectId, item, onProgress) {
+        const file = item.file;
+        const relativePath = item.relativePath || file.name;
+
+        const emptyChunk = new File(
+          [new Uint8Array(0)],
+          'chunk.bin',
+          { type: 'application/octet-stream' }
+        );
+
+        const started = await sendUploadChunk(
+          projectId,
+          relativePath,
+          'start',
+          emptyChunk
+        );
+
+        let sessionId = started.session_id;
+        let offset = started.offset || 0;
+
+        if (file.size === 0) {
+          await sendUploadChunk(
+            projectId,
+            relativePath,
+            'finish',
+            emptyChunk,
+            sessionId,
+            offset
+          );
+
+          onProgress(1);
+          return;
+        }
+
+        while (offset < file.size) {
+          const end = Math.min(offset + CHUNK_SIZE, file.size);
+          const blob = file.slice(offset, end);
+
+          const chunk = new File(
+            [blob],
+            'chunk.bin',
+            { type: 'application/octet-stream' }
+          );
+
+          const isLast = end >= file.size;
+
+          const result = await sendUploadChunk(
+            projectId,
+            relativePath,
+            isLast ? 'finish' : 'append',
+            chunk,
+            sessionId,
+            offset
+          );
+
+          offset = isLast ? end : result.offset;
+          onProgress(offset / file.size);
+        }
+      }
+
+      async function readDroppedEntry(entry, basePath = '') {
+        if (entry.isFile) {
+          return await new Promise((resolve, reject) => {
+            entry.file(
+              file => resolve([{
+                file,
+                relativePath: basePath + file.name
+              }]),
+              reject
+            );
+          });
+        }
+
+        if (entry.isDirectory) {
+          const reader = entry.createReader();
+          const entries = [];
+
+          while (true) {
+            const batch = await new Promise((resolve, reject) => {
+              reader.readEntries(resolve, reject);
+            });
+
+            if (!batch.length) break;
+            entries.push(...batch);
+          }
+
+          let files = [];
+          const nextBase = basePath + entry.name + '/';
+
+          for (const child of entries) {
+            files.push(...await readDroppedEntry(child, nextBase));
+          }
+
+          return files;
+        }
+
+        return [];
+      }
+
+      async function getDroppedFiles(dataTransfer) {
+        const items = [...dataTransfer.items];
+        let result = [];
+
+        for (const item of items) {
+          const entry =
+            item.webkitGetAsEntry ? item.webkitGetAsEntry() : null;
+
+          if (entry) {
+            result.push(...await readDroppedEntry(entry));
+          } else {
+            const file = item.getAsFile();
+
+            if (file) {
+              result.push({
+                file,
+                relativePath: file.name
+              });
+            }
+          }
+        }
+
+        return result;
+      }
+
+      function selectedFiles(fileList, preserveFolders = false) {
+        return [...fileList].map(file => {
+          let relativePath = file.name;
+
+          if (preserveFolders && file.webkitRelativePath) {
+            const parts = file.webkitRelativePath
+              .replaceAll('\\', '/')
+              .split('/')
+              .filter(Boolean);
+
+            // Browser folder selection includes the selected root folder.
+            // Dropbox already has the project root, so remove that first part.
+            relativePath =
+              parts.length > 1
+                ? parts.slice(1).join('/')
+                : file.name;
+          }
+
+          return {
+            file,
+            relativePath
+          };
+        });
+      }
+
+      async function runUpload(zone, items) {
+        if (!items.length || zone.classList.contains('uploading')) return;
+
+        const projectId = zone.dataset.projectId;
+        const progressWrap = zone.querySelector('.upload-progress-wrap');
+        const progressBar = zone.querySelector('.upload-progress-bar');
+        const progressText = zone.querySelector('.upload-progress-text');
+        const actions = zone.querySelector('.upload-actions');
+
+        const totalBytes = items.reduce(
+          (sum, item) => sum + item.file.size,
+          0
+        );
+
+        let completedBytes = 0;
+
+        zone.classList.add('uploading');
+        progressWrap.style.display = 'block';
+        actions.style.display = 'none';
+        progressBar.style.width = '0%';
+
+        try {
+          for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+
+            progressText.textContent =
+              `UPLOADING ${i + 1} OF ${items.length} — ${item.file.name}`;
+
+            await uploadOneFile(
+              projectId,
+              item,
+              fileProgress => {
+                const currentBytes =
+                  completedBytes + (item.file.size * fileProgress);
+
+                const percent = totalBytes > 0
+                  ? Math.round((currentBytes / totalBytes) * 100)
+                  : 100;
+
+                progressBar.style.width = `${percent}%`;
+              }
+            );
+
+            completedBytes += item.file.size;
+          }
+
+          progressBar.style.width = '100%';
+          progressText.textContent =
+            'UPLOAD COMPLETE — YOU CAN ADD MORE FILES';
+
+          actions.style.display = 'flex';
+
+          zone.querySelector('.upload-main').textContent =
+            'DROP MORE FILES HERE';
+
+          zone.querySelector('.upload-help').textContent =
+            'Add more files or click ALL FILES UPLOADED when finished.';
+
+        } catch (error) {
+          console.error(error);
+          progressText.textContent =
+            `UPLOAD FAILED — ${error.message || 'PLEASE TRY AGAIN'}`;
+          actions.style.display = 'flex';
+        } finally {
+          zone.classList.remove('uploading');
+        }
+      }
+
+
+      document.querySelectorAll('.all-files-uploaded').forEach(button => {
+        button.addEventListener('click', async () => {
+          const card = button.closest('.project-card');
+          const zone = card.querySelector('.upload-zone');
+          const status = card.querySelector('.project-status');
+
+          if (zone.classList.contains('uploading')) {
+            return;
+          }
+
+          const confirmed = window.confirm(
+            'Are you sure all project files have been uploaded? You will not be able to upload more files after this.'
+          );
+
+          if (!confirmed) return;
+
+          button.disabled = true;
+          button.textContent = 'CLOSING UPLOAD...';
+
+          try {
+            const { data: sessionData, error: sessionError } =
+              await supabase.auth.getSession();
+
+            if (sessionError || !sessionData.session) {
+              window.location.replace('mixing.html');
+              return;
+            }
+
+            const form = new FormData();
+            form.append('project_id', button.dataset.projectId);
+            form.append('action', 'complete');
+
+            const response = await fetch(
+              'https://aqrclpzgxmvkvqgaeirc.supabase.co/functions/v1/upload-mixing-file',
+              {
+                method: 'POST',
+                headers: {
+                  'Authorization':
+                    `Bearer ${sessionData.session.access_token}`
+                },
+                body: form
+              }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+              throw new Error(
+                result.error || 'Could not close project upload.'
+              );
+            }
+
+            status.textContent = 'PENDING';
+            status.classList.remove('mix-ready');
+            status.classList.add('pending');
+
+            zone.outerHTML = `
+              <div class="upload-closed">
+                FILES SUBMITTED TO SAVO SOUND
+              </div>
+            `;
+
+            button.remove();
+
+          } catch (error) {
+            console.error(error);
+            button.disabled = false;
+            button.textContent = 'ALL FILES UPLOADED';
+            alert(error.message || 'Could not close project upload.');
+          }
+        });
+      });
+
+      document.querySelectorAll('.upload-zone').forEach(zone => {
+        const fileInput = zone.querySelector('.file-input');
+        const folderInput = zone.querySelector('.folder-input');
+        const chooseFiles = zone.querySelector('.choose-files');
+        const chooseFolder = zone.querySelector('.choose-folder');
+
+        chooseFiles.addEventListener('click', event => {
+          event.stopPropagation();
+          fileInput.click();
+        });
+
+        chooseFolder.addEventListener('click', event => {
+          event.stopPropagation();
+          folderInput.click();
+        });
+
+        fileInput.addEventListener('change', () => {
+          runUpload(zone, selectedFiles(fileInput.files, false));
+          fileInput.value = '';
+        });
+
+        folderInput.addEventListener('change', () => {
+          runUpload(zone, selectedFiles(folderInput.files, true));
+          folderInput.value = '';
+        });
+
+        zone.addEventListener('dragover', event => {
+          event.preventDefault();
+          zone.classList.add('drag-over');
+        });
+
+        zone.addEventListener('dragleave', () => {
+          zone.classList.remove('drag-over');
+        });
+
+        zone.addEventListener('drop', async event => {
+          event.preventDefault();
+          zone.classList.remove('drag-over');
+
+          try {
+            const items = await getDroppedFiles(event.dataTransfer);
+            await runUpload(zone, items);
+          } catch (error) {
+            console.error(error);
+            const progressWrap = zone.querySelector('.upload-progress-wrap');
+            const progressText = zone.querySelector('.upload-progress-text');
+
+            progressWrap.style.display = 'block';
+            progressText.textContent = 'COULD NOT READ DROPPED FILES';
+          }
+        });
+      });
+
+    });
+
+    
+     // RETURN FROM STRIPE
+     if (sessionStorage.getItem('savo-open-projects') === '1') {
+       sessionStorage.removeItem('savo-open-projects');
+       projectsTab.click();
+     }
+
+     const paymentReturn =
+       new URLSearchParams(window.location.search).get('payment');
+
+     if (paymentReturn === 'return' || paymentReturn === 'cancelled') {
+       projectsTab.click();
+
+       if (paymentReturn === 'return') {
+         /*
+          * Give the Stripe webhook a moment to update the project,
+          * then reload MY PROJECTS once.
+          */
+         setTimeout(() => {
+           const url = new URL(window.location.href);
+
+           url.searchParams.delete('payment');
+           url.searchParams.delete('project');
+
+           window.history.replaceState(
+             {},
+             '',
+             url.pathname + url.search
+           );
+
+           sessionStorage.setItem('savo-open-projects', '1');
+            window.location.reload();
+         }, 1800);
+
+       } else {
+         const url = new URL(window.location.href);
+
+         url.searchParams.delete('payment');
+         url.searchParams.delete('project');
+
+         window.history.replaceState(
+           {},
+           '',
+           url.pathname + url.search
+         );
+       }
+     }
+
+     const sendButton = document.getElementById('send-inquiry');
     const messageBox = document.getElementById('inquiry-message');
     const statusBox = document.getElementById('inquiry-status');
 

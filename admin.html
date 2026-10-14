@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin | Savo Sound</title>
+
+<style>
+html, body {
+    margin: 0;
+    min-height: 100%;
+    background: #000;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    visibility: hidden;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-image:
+        linear-gradient(rgba(0,0,0,0.72), rgba(0,0,0,0.72)),
+        url("miksingbak.png");
+    background-size: 100% auto;
+    background-position: top center;
+    background-repeat: no-repeat;
+}
+
+.admin-content {
+    width: min(900px, calc(100% - 40px));
+    margin: 100px auto;
+}
+
+.admin-content h1 {
+    margin: 0 0 18px;
+    font-size: 46px;
+    letter-spacing: 5px;
+}
+
+.admin-content p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.75);
+}
+
+.customer-card {
+    margin: 14px 0;
+    padding: 18px 20px;
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 8px;
+    background: rgba(0,0,0,0.55);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.customer-card:hover {
+    border-color: rgba(255,255,255,0.55);
+    background: rgba(0,0,0,0.72);
+}
+
+.project-controls {
+    display: none;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.project-controls.open {
+    display: block;
+}
+
+.project-controls input,
+.project-controls select {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 6px 0;
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 5px;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    font-size: 15px;
+}
+
+.create-project-button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 13px;
+    border: 1px solid rgba(255,255,255,0.55);
+    border-radius: 5px;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.create-project-button:hover {
+    background: rgba(255,255,255,0.20);
+}
+
+.project-message {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+    .project-files-panel {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255,255,255,0.12);
+        position: relative;
+        z-index: 10;
+        pointer-events: auto;
+    }
+
+    .revision-request-button,
+    .revision-request-message {
+        position: relative;
+        z-index: 11;
+        pointer-events: auto;
+    }
+
+    .revision-request-button {
+        cursor: pointer;
+    }
+
+    .load-project-files-button {
+        width: 100%;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .project-file-list {
+        margin-top: 10px;
+    }
+
+    .project-file-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        font-size: 13px;
+    }
+
+    .project-file-name {
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .set-preview-button {
+        flex: 0 0 auto;
+        cursor: pointer;
+    }
+
+    .preview-badge {
+        color: #7dff9b;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+    }
+
+    .mark-mix-ready-button {
+        width: 100%;
+        margin-top: 12px;
+        padding: 12px 18px;
+        border: 1px solid rgba(98,217,130,0.75);
+        border-radius: 4px;
+        background: transparent;
+        color: #62d982;
+        font: inherit;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .mark-mix-ready-button:hover {
+        background: #62d982;
+        color: black;
+    }
+
+    .mark-mix-ready-button:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
+
+</style>
+</head>
+
+<body>
+
+<main class="admin-content">
+    <h1>SAVO SOUND ADMIN</h1>
+    <p class="admin-status">Registered customers</p>
+    <div id="customerList"></div>
+</main>
+
+<script type="module">
+import { createClient } from
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const supabase = createClient(
+  'https://aqrclpzgxmvkvqgaeirc.supabase.co',
+  'sb_publishable_EfdZX4IhjuqWadyf0bi2wg_znf8kNXU'
+);
+
+try {
+    const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
+
+    if (sessionError || !sessionData.session) {
+        window.location.replace('mixing.html');
+    } else {
+        const userId = sessionData.session.user.id;
+
+        const { data: adminData, error: adminError } =
+            await supabase
+                .from('savo_admins')
+                .select('user_id')
+                .eq('user_id', userId)
+                .maybeSingle();
+
+        if (adminError || !adminData) {
+            window.location.replace('customer.html');
+        } else {
+            const { data: customers, error: customerError } =
+                await supabase.rpc('get_mixing_customers');
+
+            if (customerError) {
+                throw customerError;
+            }
+
+            const customerList = document.getElementById('customerList');
+
+            if (!customers || customers.length === 0) {
+                customerList.innerHTML = '<p>No registered customers.</p>';
+            } else {
+                customerList.innerHTML = customers.map(customer => {
+                    const name = customer.full_name || 'No name';
+                    const email = customer.email || 'No email';
+
+                    return `
+                        <div class="customer-card" data-customer-id="${customer.id}">
+                            <strong>${name}</strong><br>
+                            <span style="color:rgba(255,255,255,0.65)">${email}</span>
+
+                            <div class="project-controls">
+                                <input
+                                    class="project-name"
+                                    type="text"
+                                    placeholder="Project name"
+                                >
+
+                                <select class="project-price">
+                                    <option value="1500">Up to 32 tracks — 1,500 NOK</option>
+                                    <option value="3000">33–64 tracks — 3,000 NOK</option>
+                                    <option value="4500">65–120 tracks — 4,500 NOK</option>
+                                    <option value="custom">121+ — Custom price</option>
+                                </select>
+
+                                <input
+                                    class="custom-price"
+                                    type="number"
+                                    min="0"
+                                    step="1"
+                                    placeholder="Custom price NOK"
+                                    style="display:none"
+                                >
+
+                                <button class="create-project-button">
+                                    CREATE PROJECT
+                                </button>
+
+                                <div class="project-message"></div>
+
+                                <div class="existing-projects" style="margin-top:24px">
+                                    <strong style="font-size:13px;letter-spacing:1px">
+                                        EXISTING PROJECTS
+                                    </strong>
+                                    <div class="existing-project-list" style="margin-top:10px">
+                                        <span style="color:rgba(255,255,255,0.55)">
+                                            Open customer to load projects.
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                document.querySelectorAll('.customer-card').forEach(card => {
+                    const controls = card.querySelector('.project-controls');
+                    const priceSelect = card.querySelector('.project-price');
+                    const customPrice = card.querySelector('.custom-price');
+                    const createButton = card.querySelector('.create-project-button');
+                    const message = card.querySelector('.project-message');
+                    const projectList = card.querySelector('.existing-project-list');
+                    let projectsLoaded = false;
+
+                    async function loadProjects() {
+                        projectList.innerHTML =
+                            '<span style="color:rgba(255,255,255,0.55)">Loading projects...</span>';
+
+                        const { data: projects, error } =
+                            await supabase.rpc('get_customer_mixing_projects', {
+                                p_customer_id: card.dataset.customerId
+                            });
+
+                        if (error) {
+                            console.error(error);
+                            projectList.textContent = 'Could not load projects.';
+                            return;
+                        }
+
+                        projectsLoaded = true;
+
+                        if (!projects || projects.length === 0) {
+                            projectList.innerHTML =
+                                '<span style="color:rgba(255,255,255,0.55)">No projects yet.</span>';
+                            return;
+                        }
+
+                        projectList.innerHTML = projects.map(project => {
+                            const price = project.price_nok != null
+                                ? Number(project.price_nok).toLocaleString('en-US') + ' NOK'
+                                : 'Price not set';
+
+                            const status = (project.status || 'active')
+                                .replaceAll('_', ' ')
+                                .toUpperCase();
+
+                            const dropbox = project.dropbox_path
+                                ? 'DROPBOX CONNECTED'
+                                : 'NO DROPBOX FOLDER';
+
+                            return `
+                                <div class="existing-project-card"
+                                     data-project-id="${project.id}"
+                                     style="
+                                        margin-top:10px;
+                                        padding:14px;
+                                        border:1px solid rgba(255,255,255,0.18);
+                                        border-radius:6px;
+                                        background:rgba(255,255,255,0.035);
+                                     ">
+
+                                    <input
+                                        class="edit-project-name"
+                                        type="text"
+                                        value="${project.project_name}"
+                                        style="margin-bottom:8px"
+                                    >
+
+                                    <input
+                                        class="edit-project-price"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        value="${project.price_nok ?? ''}"
+                                        style="margin-bottom:8px"
+                                    >
+
+                                    <div style="
+                                        margin-bottom:10px;
+                                        color:rgba(255,255,255,0.65);
+                                        font-size:13px;
+                                    ">
+                                        ${status} · ${price} · ${dropbox}
+                                    </div>
+
+                                    <div style="display:flex;gap:8px">
+                                        <button class="save-project-button"
+                                                style="flex:1">
+                                            SAVE
+                                        </button>
+
+                                        <button class="delete-project-button"
+                                                style="flex:1">
+                                            DELETE
+                                        </button>
+                                    </div>
+
+                                    <div class="project-files-panel">
+                                        <button class="load-project-files-button">
+                                            LOAD PROJECT FILES
+                                        </button>
+
+                                        <div class="project-file-list"></div>
+
+                                        <button
+                                            type="button"
+                                            class="mark-mix-ready-button">
+                                            MARK MIX READY
+                                        </button>
+
+                                        ${project.revision_message ? `
+                                            <button
+                                                type="button"
+                                                class="revision-request-button"
+                                                style="
+                                                    width:100%;
+                                                    margin-top:10px;
+                                                    ${project.revision_read
+                                                        ? 'background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.25);color:white;'
+                                                        : 'background:#b00020;border:1px solid #ff405f;color:white;'}
+                                                ">
+                                                REVISION REQUEST${project.revision_read ? '' : ' — UNREAD'}
+                                            </button>
+
+                                            <div
+                                                class="revision-request-message"
+                                                style="
+                                                    display:none;
+                                                    margin-top:10px;
+                                                    padding:16px;
+                                                    border:1px solid rgba(255,255,255,0.22);
+                                                    border-radius:6px;
+                                                    background:rgba(0,0,0,0.28);
+                                                    white-space:pre-wrap;
+                                                    line-height:1.5;
+                                                "></div>
+                                        ` : ''}
+                                    </div>
+
+                                    <div class="edit-project-message"
+                                         style="margin-top:8px;font-size:13px"></div>
+                                </div>
+                            `;
+                        }).join('');
+
+                        projectList.querySelectorAll('.existing-project-card')
+                            .forEach(projectCard => {
+
+                            const project = projects.find(
+                                item => String(item.id) === String(projectCard.dataset.projectId)
+                            );
+
+                            if (!project) {
+                                console.error(
+                                    'Could not match project data to project card:',
+                                    projectCard.dataset.projectId
+                                );
+                                return;
+                            }
+
+                            const saveButton =
+                                projectCard.querySelector('.save-project-button');
+
+                            const deleteButton =
+                                projectCard.querySelector('.delete-project-button');
+
+                            const editMessage =
+                                projectCard.querySelector('.edit-project-message');
+
+                            const loadFilesButton =
+                                projectCard.querySelector('.load-project-files-button');
+
+                            const projectFileList =
+                                projectCard.querySelector('.project-file-list');
+
+                            const markMixReadyButton =
+                                projectCard.querySelector('.mark-mix-ready-button');
+
+                            const revisionRequestButton =
+                                projectCard.querySelector('.revision-request-button');
+
+                            if (revisionRequestButton) {
+                                revisionRequestButton.addEventListener('click', async function(event) {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+
+                                    const revisionRequestMessage =
+                                        projectCard.querySelector('.revision-request-message');
+
+                                    if (!revisionRequestMessage) return;
+
+                                    revisionRequestMessage.textContent =
+                                        project.revision_message || 'No revision message.';
+
+                                    const opening =
+                                        revisionRequestMessage.style.display !== 'block';
+
+                                    revisionRequestMessage.style.display =
+                                        opening ? 'block' : 'none';
+
+                                    if (opening && project.revision_read !== true) {
+                                        try {
+                                            const { data, error } =
+                                                await supabase.functions.invoke(
+                                                    'mark-revision-read',
+                                                    {
+                                                        body: {
+                                                            project_id:
+                                                                projectCard.dataset.projectId
+                                                        }
+                                                    }
+                                                );
+
+                                            if (error || !data?.success) {
+                                                console.error(
+                                                    'Could not mark revision as read:',
+                                                    error,
+                                                    data
+                                                );
+                                            } else {
+                                                project.revision_read = true;
+                                                revisionRequestButton.textContent =
+                                                    'REVISION REQUEST';
+                                            }
+                                        } catch (error) {
+                                            console.error(
+                                                'Could not mark revision as read:',
+                                                error
+                                            );
+                                        }
+                                    }
+                                });
+                            }
+
+                            markMixReadyButton.addEventListener('click', async event => {
+                                event.stopPropagation();
+
+                                if (!window.confirm(
+                                    'Mark this mix as ready for the customer?'
+                                )) {
+                                    return;
+                                }
+
+                                markMixReadyButton.disabled = true;
+                                editMessage.textContent =
+                                    'Marking mix ready...';
+
+                                const {
+                                    data: readyData,
+                                    error: readyError
+                                } =
+                                    await supabase.functions.invoke(
+                                        'mark-mix-ready',
+                                        {
+                                            body: {
+                                                project_id:
+                                                    projectCard.dataset.projectId
+                                            }
+                                        }
+                                    );
+
+                                if (readyError || !readyData?.success) {
+                                    console.error(
+                                        'Could not mark mix ready:',
+                                        readyError,
+                                        readyData
+                                    );
+
+                                    editMessage.textContent =
+                                        readyData?.error ||
+                                        readyError?.message ||
+                                        'Could not mark mix ready.';
+
+                                    markMixReadyButton.disabled = false;
+                                    return;
+                                }
+
+                                editMessage.textContent =
+                                    'MIX READY — customer preview is now available.';
+
+                                const statusText =
+                                    projectCard.querySelector('.existing-project-status');
+
+                                if (statusText) {
+                                    statusText.textContent =
+                                        'Status: MIX READY';
+                                }
+
+                                markMixReadyButton.textContent =
+                                    'MIX READY';
+
+                                markMixReadyButton.disabled = true;
+                            });
+
+                            loadFilesButton.addEventListener('click', async event => {
+                                event.stopPropagation();
+
+                                loadFilesButton.disabled = true;
+                                projectFileList.innerHTML =
+                                    '<span style="color:rgba(255,255,255,0.55)">Loading project files...</span>';
+
+                                const { data, error } =
+                                    await supabase.functions.invoke('list-project-files', {
+                                        body: {
+                                            project_id: projectCard.dataset.projectId
+                                        }
+                                    });
+
+                                loadFilesButton.disabled = false;
+
+                                if (error || !data?.success) {
+                                    console.error(
+                                        'Could not load project files:',
+                                        error,
+                                        data
+                                    );
+
+                                    projectFileList.textContent =
+                                        data?.error ||
+                                        error?.message ||
+                                        'Could not load project files.';
+
+                                    return;
+                                }
+
+                                const entries = data.files || [];
+
+                                if (entries.length === 0) {
+                                    projectFileList.innerHTML =
+                                        '<span style="color:rgba(255,255,255,0.55)">Project folder is empty.</span>';
+                                    return;
+                                }
+
+                                projectFileList.innerHTML = entries.map(entry => {
+
+                                    const isAudio =
+                                        entry.type === 'file' &&
+                                        /\.(wav|wave|aif|aiff|mp3|m4a|flac|ogg)$/i
+                                            .test(entry.name);
+
+                                    let action = '';
+
+                                    if (entry.type === 'folder') {
+                                        action =
+                                            '<span style="color:rgba(255,255,255,0.45)">FOLDER</span>';
+                                    } else if (entry.is_preview) {
+                                        action =
+                                            '<span class="preview-badge">CURRENT PREVIEW</span>';
+                                    } else if (isAudio) {
+                                        action =
+                                            `<button class="set-preview-button"
+                                                data-path="${encodeURIComponent(entry.path)}">
+                                                SET AS PREVIEW
+                                             </button>`;
+                                    }
+
+                                    return `
+                                        <div class="project-file-row">
+                                            <span>${entry.type === 'folder' ? '📁' : '♪'}</span>
+
+                                            <span class="project-file-name">
+                                                ${entry.name}
+                                            </span>
+
+                                            ${action}
+                                        </div>
+                                    `;
+                                }).join('');
+
+                                projectFileList
+                                    .querySelectorAll('.set-preview-button')
+                                    .forEach(button => {
+
+                                        button.addEventListener('click', async e => {
+                                            e.stopPropagation();
+
+                                            button.disabled = true;
+                                            editMessage.textContent =
+                                                'Setting preview...';
+
+                                            const previewPath =
+                                                decodeURIComponent(
+                                                    button.dataset.path || ''
+                                                );
+
+                                            const {
+                                                data: previewData,
+                                                error: previewError
+                                            } =
+                                                await supabase.functions.invoke(
+                                                    'set-project-preview',
+                                                    {
+                                                        body: {
+                                                            project_id:
+                                                                projectCard.dataset.projectId,
+
+                                                            preview_file_path:
+                                                                previewPath
+                                                        }
+                                                    }
+                                                );
+
+                                            if (
+                                                previewError ||
+                                                !previewData?.success
+                                            ) {
+                                                console.error(
+                                                    'Could not set preview:',
+                                                    previewError,
+                                                    previewData
+                                                );
+
+                                                editMessage.textContent =
+                                                    previewData?.error ||
+                                                    previewError?.message ||
+                                                    'Could not set preview.';
+
+                                                button.disabled = false;
+                                                return;
+                                            }
+
+                                            editMessage.textContent =
+                                                'Preview selected.';
+
+                                            loadFilesButton.click();
+                                        });
+                                    });
+                            });
+
+                            saveButton.addEventListener('click', async event => {
+                                event.stopPropagation();
+
+                                const name = projectCard
+                                    .querySelector('.edit-project-name')
+                                    .value.trim();
+
+                                const price = Number(projectCard
+                                    .querySelector('.edit-project-price')
+                                    .value);
+
+                                if (!name || !Number.isInteger(price) || price < 0) {
+                                    editMessage.textContent =
+                                        'Enter a valid project name and price.';
+                                    return;
+                                }
+
+                                saveButton.disabled = true;
+                                editMessage.textContent = 'Saving...';
+
+                                const { error } =
+                                    await supabase.rpc('update_mixing_project', {
+                                        p_project_id: projectCard.dataset.projectId,
+                                        p_project_name: name,
+                                        p_price_nok: price
+                                    });
+
+                                if (error) {
+                                    editMessage.textContent = error.message;
+                                    saveButton.disabled = false;
+                                    return;
+                                }
+
+                                editMessage.textContent = 'Saved.';
+                                saveButton.disabled = false;
+
+                                projectsLoaded = false;
+                                await loadProjects();
+                            });
+
+                            deleteButton.addEventListener('click', async event => {
+                                event.stopPropagation();
+
+                                if (!confirm(
+                                    'Delete this project? This cannot be undone.'
+                                )) {
+                                    return;
+                                }
+
+                                deleteButton.disabled = true;
+                                editMessage.textContent = 'Deleting...';
+
+                                deleteButton.disabled = true;
+                                editMessage.textContent = 'Deleting project and its Dropbox folder...';
+
+                                const { data: deleteData, error: deleteError } =
+                                    await supabase.functions.invoke('delete-mixing-project', {
+                                        body: {
+                                            project_id: projectCard.dataset.projectId
+                                        }
+                                    });
+
+                                if (deleteError || !deleteData?.success) {
+                                    console.error('Project deletion failed:', deleteError, deleteData);
+                                    editMessage.textContent =
+                                        deleteData?.message ||
+                                        deleteError?.message ||
+                                        'Could not delete project. Please check the logs.';
+                                    deleteButton.disabled = false;
+                                    return;
+                                }
+
+                                editMessage.textContent = 'Project and its Dropbox folder deleted.';
+                                projectsLoaded = false;
+                                await loadProjects();
+                            });
+                        });
+                    }
+
+                    card.addEventListener('click', async event => {
+                        if (
+                            event.target.closest('input') ||
+                            event.target.closest('select') ||
+                            event.target.closest('button')
+                        ) return;
+
+                        controls.classList.toggle('open');
+
+                        if (
+                            controls.classList.contains('open') &&
+                            !projectsLoaded
+                        ) {
+                            await loadProjects();
+                        }
+                    });
+
+                    priceSelect.addEventListener('change', () => {
+                        customPrice.style.display =
+                            priceSelect.value === 'custom' ? 'block' : 'none';
+                    });
+
+                    createButton.addEventListener('click', async event => {
+                        event.stopPropagation();
+
+                        const projectName =
+                            card.querySelector('.project-name').value.trim();
+
+                        let price;
+
+                        if (priceSelect.value === 'custom') {
+                            price = Number(customPrice.value);
+                        } else {
+                            price = Number(priceSelect.value);
+                        }
+
+                        if (!projectName) {
+                            message.textContent = 'Enter a project name.';
+                            return;
+                        }
+
+                        if (!Number.isInteger(price) || price < 0) {
+                            message.textContent = 'Enter a valid price.';
+                            return;
+                        }
+
+                        createButton.disabled = true;
+                        message.textContent = 'Creating project...';
+
+                        const { data: projectData, error: projectError } =
+                            await supabase.functions.invoke('create-mixing-project', {
+                                body: {
+                                    customer_id: card.dataset.customerId,
+                                    project_name: projectName,
+                                    price_nok: price
+                                }
+                            });
+
+                        if (projectError) {
+                            console.error(projectError);
+
+                            let realMessage = projectError.message;
+
+                            try {
+                                if (projectError.context) {
+                                    const errorBody =
+                                        await projectError.context.json();
+
+                                    realMessage =
+                                        errorBody.message ||
+                                        JSON.stringify(errorBody);
+                                }
+                            } catch (e) {
+                                console.error('Could not read Edge Function error body:', e);
+                            }
+
+                            message.textContent =
+                                'Could not create project: ' + realMessage;
+
+                            createButton.disabled = false;
+                            return;
+                        }
+
+                        message.textContent =
+                            'Project created — Dropbox ready — ID: ' +
+                            projectData.project_id;
+
+                        card.querySelector('.project-name').value = '';
+                        createButton.disabled = false;
+
+                        projectsLoaded = false;
+                        await loadProjects();
+                    });
+                });
+            }
+
+            document.body.style.visibility = 'visible';
+        }
+    }
+} catch (error) {
+    console.error(error);
+    window.location.replace('mixing.html');
+}
+</script>
+
+</body>
+</html>

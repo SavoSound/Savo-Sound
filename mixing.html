@@ -327,7 +327,7 @@ body {
         <section class="mixing-section">
             <h2>Pricing</h2>
 
-            <p class="price-intro">Prices are based on the number of individual audio tracks delivered for mixing. <strong>A stereo audio file counts as one track.</strong></p>
+            <p class="price-intro">Prices are fixed in NOK and based on the number of individual audio tracks delivered for mixing. <strong>A stereo audio file counts as one track.</strong></p>
 
             <div class="price-item">
                 <span class="range">UP TO 32 TRACKS</span>
@@ -451,7 +451,7 @@ body {
             const nok = Number(el.dataset.nok);
             const usd = Math.round(nok * rate);
 
-            el.textContent = `≈ $${usd.toLocaleString('en-US')} USD`;
+            el.textContent = `Approximately $${usd.toLocaleString('en-US')} USD`;
             el.style.display = 'block';
         });
     } catch (error) {
@@ -500,6 +500,15 @@ function setMode(nextMode) {
 
 createButton.addEventListener('click', () => {
   setMode(mode === 'login' ? 'signup' : 'login');
+});
+
+[nameField, emailField, passwordField].forEach(field => {
+  field.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      loginButton.click();
+    }
+  });
 });
 
 loginButton.addEventListener('click', async () => {
@@ -562,7 +571,19 @@ loginButton.addEventListener('click', async () => {
     if (error) throw error;
     if (!data.session) throw new Error('Login was not completed. Please try again.');
 
-    window.location.href = 'customer.html';
+    const userId = data.session.user.id;
+
+    const { data: adminData, error: adminError } = await supabase
+      .from('savo_admins')
+      .select('user_id')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (!adminError && adminData) {
+      window.location.href = 'admin.html';
+    } else {
+      window.location.href = 'customer.html';
+    }
   } catch (error) {
     showMessage(error.message || 'Login failed. Please check your details.');
     loginButton.disabled = false;
