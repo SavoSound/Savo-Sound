@@ -100,35 +100,75 @@
 .plugin-grid {
     width: min(1100px, 88vw);
     margin: 55px auto 0;
+    padding: 28px;
+    box-sizing: border-box;
+
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px;
+
     border: 1px solid rgba(255,255,255,0.75);
-    min-height: calc(100vh - 260px);
-    position: relative;
+    background: rgba(0,0,0,0.08);
 }
 
-.plugin-grid::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 1px;
-    background: rgba(255,255,255,0.75);
+.plugin-section-title {
+    grid-column: 1 / -1;
+    margin: 2px 0 6px;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: 10px;
+    text-align: center;
+
+    text-shadow:
+        0 0 10px #000,
+        0 0 25px #000,
+        0 0 55px #000,
+        0 0 90px #000;
 }
 
-.plugin-slot {
+.plugin-category {
+    min-height: 220px;
+    padding: 28px 24px 32px;
+    box-sizing: border-box;
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    gap: 14px;
-    padding-top: 35px;
-    box-sizing: border-box;
-    background: rgba(0,0,0,0.12);
+
+    border: 1px solid rgba(255,255,255,0.65);
+    background: rgba(0,0,0,0.16);
 }
 
-.plugin-slot:nth-child(odd) {
+.category-name {
+    width: calc(100% + 20px);
+    margin: -4px -10px 28px;
+    padding: 12px 10px 14px;
+    box-sizing: border-box;
+
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-align: center;
+
+    background: #000;
+
+    border: 1px solid rgba(255,255,255,0.55);
+
+    text-shadow:
+        0 0 8px #000,
+        0 0 20px #000,
+        0 0 40px #000;
+}
+
+.plugin-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
 }
 
 .plugin-name {
@@ -137,30 +177,70 @@
     font-size: 22px;
     font-weight: 600;
     letter-spacing: 3px;
+
     text-shadow:
         0 0 8px #000,
         0 0 20px #000,
         0 0 40px #000;
 }
+
+@media (max-width: 700px) {
+    .plugin-grid {
+        grid-template-columns: 1fr;
+        padding: 18px;
+        gap: 18px;
+    }
+
+    .plugin-category {
+        min-height: 0;
+    }
+}
 </style>
 
 <div class="plugin-grid">
-    <div class="plugin-slot">
-        <a href="skrikern.html" class="plugin-name">Skriker`n</a>
-        <a href="2000xl.html" class="plugin-name">2000XL</a>
-        <a href="1567.html" class="plugin-name">1567</a>
-        <a href="STA ELL.html" class="plugin-name">STA ELL</a>
-        <a href="VOJ.html" class="plugin-name">VOJ</a>
-        <a href="3 D.html" class="plugin-name">3 D</a>
+
+    <div class="plugin-section-title">VST3</div>
+
+    <div class="plugin-category">
+        <h2 class="category-name">DYNAMICS</h2>
+        <div class="plugin-links">
+            <a href="2A'n.html" class="plugin-name">2A'n</a>
+            <a href="2176.html" class="plugin-name">2176</a>
+            <a href="STA ELL.html" class="plugin-name">STA ELL</a>
+        </div>
     </div>
 
-    <div class="plugin-slot">
-        <a href="lysogvarme.html" class="plugin-name">Lys og Varme</a>
-        <a href="freaq.html" class="plugin-name">frEaQ</a>
-        <a href="2A'n.html" class="plugin-name">2A'n</a>
-        <a href="2176.html" class="plugin-name">2176</a>
-        <a href="WF92A.html" class="plugin-name">WF92A</a>
+    <div class="plugin-category">
+        <h2 class="category-name">EQ</h2>
+        <div class="plugin-links">
+            <a href="freaq.html" class="plugin-name">frEaQ</a>
+        </div>
     </div>
+
+    <div class="plugin-category">
+        <h2 class="category-name">RESONANCE</h2>
+        <div class="plugin-links">
+            <a href="VOJ.html" class="plugin-name">VOJ</a>
+            <a href="WF92A.html" class="plugin-name">WF92A</a>
+        </div>
+    </div>
+
+    <div class="plugin-category">
+        <h2 class="category-name">REVERB / ECHO</h2>
+        <div class="plugin-links">
+            <a href="3 D.html" class="plugin-name">3 D</a>
+        </div>
+    </div>
+
+    <div class="plugin-category">
+        <h2 class="category-name">SATURATION</h2>
+        <div class="plugin-links">
+            <a href="1567.html" class="plugin-name">1567</a>
+            <a href="2000xl.html" class="plugin-name">2000XL</a>
+            <a href="skrikern.html" class="plugin-name">Skriker`n</a>
+        </div>
+    </div>
+
 </div>
 
 
